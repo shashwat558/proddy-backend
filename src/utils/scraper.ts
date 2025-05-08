@@ -8,7 +8,9 @@ export async function getProductDetails(productUrl: string){
     console.log(productId)
 
     const browser = await puppeteer.launch({
-        headless: "shell",
+        headless: true,
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/opt/render/project/puppeteer/chromium/chrome',
+
 
         args: ["--disable-blink-features=AutomationControlled", '--no-sandbox', '--disable-setuid-sandbox'],
     })
