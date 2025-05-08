@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# exit on error
+# Exit on error
 set -o errexit
 
 # Set Puppeteer cache path
@@ -9,23 +9,21 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 # Install Node dependencies
 npm install
 
-# Optional: Build TypeScript
+# Optional: Build TS
 npm run build
 
 # Manually install Chromium
 echo "Installing Chromium..."
-CHROMIUM_DIR="/opt/render/project/puppeteer/chromium"
-CHROMIUM_BIN="$CHROMIUM_DIR/chrome"
+CHROMIUM_DIR="$PUPPETEER_CACHE_DIR/chromium"
+ZIP_FILE="$CHROMIUM_DIR/chromium.zip"
+CHROMIUM_BIN="$CHROMIUM_DIR/chrome-linux/chrome"
 
-# Download Chromium binary
 if [ ! -f "$CHROMIUM_BIN" ]; then
-  echo "Downloading Chromium binary..."
   mkdir -p "$CHROMIUM_DIR"
-  wget https://download-chromium.appspot.com/dl/Linux_x64 -O "$CHROMIUM_BIN"
+  wget https://download-chromium.appspot.com/dl/Linux_x64 -O "$ZIP_FILE"
+  unzip "$ZIP_FILE" -d "$CHROMIUM_DIR"
   chmod +x "$CHROMIUM_BIN"
+  echo "Chromium installed at $CHROMIUM_BIN"
 else
-  echo "Chromium binary already exists."
+  echo "Chromium already exists."
 fi
-
-# Set path for Puppeteer to use this binary
-export PUPPETEER_EXECUTABLE_PATH="$CHROMIUM_BIN"

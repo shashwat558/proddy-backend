@@ -9,8 +9,7 @@ export async function getProductReviews(productUrl:string){
 
     const browser = await puppeteer.launch({
         headless: true,
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/opt/render/project/puppeteer/chromium/chrome',
-
+        executablePath: '/opt/render/project/puppeteer/chromium/chrome-linux/chrome',
         args: ["--disable-blink-features=AutomationControlled", '--no-sandbox', '--disable-setuid-sandbox']
     })
 
