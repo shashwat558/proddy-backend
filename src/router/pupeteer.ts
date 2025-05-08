@@ -19,7 +19,8 @@ router.post("/", async (req: Request, res: Response) => {
         console.log(productDetails, reviews);
         return res.json({productDetails, reviews});
     } catch (error) {
-        res.json({"message": "Error scraping details"})
+        console.log(error)
+        res.json({"message": "Error scraping details", error})
     }
 })
 
