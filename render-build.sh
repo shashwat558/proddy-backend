@@ -12,18 +12,38 @@ npm install
 # OPTIONAL: Run build step if using TypeScript
 npm run build
 
-# Force install Chromium using Puppeteer
+# Manually install Chromium
 echo "Installing Chromium..."
-npx puppeteer install --chrome-executable-const=chromium
+CHROMIUM_DIR="/opt/render/project/puppeteer/chromium"
 
-# Check if Chromium was installed successfully
-if ! command -v chromium &> /dev/null; then
-  echo "Chromium could not be installed or is missing"
+# Download Chromium if not already installed
+if [ ! -d "$CHROMIUM_DIR" ]; then
+  echo "Chromium not found, downloading..."
+  mkdir -p "$CHROMIUM_DIR"
+  
+  # Download the latest stable release of Chromium (Linux version)
+  wget https://download-chromium.appspot.com/dl/Linux_x64 --no-check-certificate -O chromium.tar.gz
+
+  # Extract Chromium into the appropriate directory
+  tar -xzvf chromium.tar.gz -C "$CHROMIUM_DIR"
+  rm chromium.tar.gz
+else
+  echo "Chromium is already installed."
+fi
+
+# Check if Chromium binary exists
+if [ ! -f "$CHROMIUM_DIR/chrome" ]; then
+  echo "Chromium installation failed or binary not found!"
   exit 1
 fi
 
-# Save Puppeteer cache (Render persists build cache dirs)
-if [ -d "$XDG_CACHE_HOME/puppeteer" ]; then
+# Set environment variable for Puppeteer to use the correct Chromium path
+export PUPPETEER_EXECUTABLE_PATH="$CHROMIUM_DIR/chrome"
+
+# Cache Puppeteer binary
+
+
+if [[ ! -d $PUPPETEER_CACHE_DIR]]; then
   echo "Caching Puppeteer Chromium..."
   mkdir -p "$PUPPETEER_CACHE_DIR"
   cp -R "$XDG_CACHE_HOME/puppeteer/"* "$PUPPETEER_CACHE_DIR"
