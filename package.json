@@ -2,13 +2,11 @@
   "name": "proddy-backend",
   "version": "1.0.0",
   "main": "index.js",
- "scripts": {
-  "build": "tsc",
-  "start": "node dist/index.js",
-  
-  "postinstall": "puppeteer install"
-
-},
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "postinstall": "puppeteer install"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
