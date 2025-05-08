@@ -2,14 +2,24 @@
 # exit on error
 set -o errexit
 
-npm install
-npm run build  # Uncomment if you're using TypeScript or a build step
+# Set Puppeteer cache path (Render-specific)
+export PUPPETEER_CACHE_DIR="/opt/render/project/puppeteer"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
 
-# Puppeteer cache fix
-if [[ ! -d $PUPPETEER_CACHE_DIR ]]; then 
-  echo "...Copying Puppeteer Cache from Build Cache" 
-  cp -R $XDG_CACHE_HOME/puppeteer/ $PUPPETEER_CACHE_DIR
-else 
-  echo "...Storing Puppeteer Cache in Build Cache" 
-  cp -R $PUPPETEER_CACHE_DIR $XDG_CACHE_HOME
+npm install
+
+# OPTIONAL: Run build step if using TypeScript
+npm run build
+
+# Manually install Chromium (this downloads the browser)
+echo "Installing Chromium..."
+npx puppeteer install
+
+# Save the browser cache (Render persists build cache dirs)
+if [ -d "$XDG_CACHE_HOME/puppeteer" ]; then
+  echo "Caching Puppeteer Chromium..."
+  mkdir -p "$PUPPETEER_CACHE_DIR"
+  cp -R "$XDG_CACHE_HOME/puppeteer/"* "$PUPPETEER_CACHE_DIR"
+else
+  echo "No Puppeteer cache found to save."
 fi
