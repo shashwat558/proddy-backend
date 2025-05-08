@@ -25,7 +25,8 @@ router.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return res.json({ message: "No url provided" });
     }
     try {
-        const [productDetails, reviews] = yield Promise.all([(0, scraper_1.getProductDetails)(url), (0, reviews_1.getProductReviews)(url)]);
+        const productDetails = yield (0, scraper_1.getProductDetails)(url);
+        const reviews = yield (0, reviews_1.getProductReviews)(url);
         console.log(productDetails, reviews);
         return res.json({ productDetails, reviews });
     }

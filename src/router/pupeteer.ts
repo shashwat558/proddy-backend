@@ -14,7 +14,8 @@ router.post("/", async (req: Request, res: Response) => {
         return res.json({message: "No url provided"})
     }
     try {
-        const [productDetails, reviews] = await Promise.all([getProductDetails(url), getProductReviews(url)]);
+        const productDetails = await  getProductDetails(url)
+        const reviews = await getProductReviews(url)
         console.log(productDetails, reviews);
         return res.json({productDetails, reviews});
     } catch (error) {
